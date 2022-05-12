@@ -22,11 +22,19 @@ This challenge should not take more than 2-3 hours. You now have the base requir
 
 #### Extra credit ideas
 
-- Spin up a simple API to handle the "Can I Fly?" logic
 - Deploy your project to [GitHub Pages](https://pages.github.com/) (We acknowledge that in order to do this, you can't make your repo private. That's ok.)
 - Update the intersection graphic and computed area when the sketch is moved (i.e. clicked and dragged)
 - Provide a layer control to toggle the visibility of your flight area
 - Add unit/snapshot tests
+- <insert your awesome idea here!>
+
+## For Backend Developers
+
+We recognize this challenge may not suit the needs of backend orientated engineers. If you are applying for a backend role, here are some optional ideas to tailor the challenge to your skillset. These ideas may or may not directly correlate to the description above.
+
+- Spin up a simple API to handle the "Can I Fly?" logic in the language of your choice (Golang preferred)
+- Using an origin and destination point (lat/lng) on opposite sides of the GeoJSON polygon defined in `src/sample.ts`, algorithmically generate a set of waypoints that navigates around the polygon
+- Using open source tooling, dynamically serve the GeoJSON polygon defined in `src/sample.ts` as a vector tile layer. Adhering to the [vector tile](https://github.com/mapbox/vector-tile-spec/tree/master/2.1/) specification
 - <insert your awesome idea here!>
 
 ## Setup instructions
