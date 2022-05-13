@@ -29,7 +29,7 @@ This challenge should not take more than 2-3 hours. You now have the base requir
 - [MapStore](/src/stores/MapStore.ts) might be getting a bit bloated. Time for refactoring?
 - <insert your awesome idea here!>
 
-## For Backend Developers
+## Backend Developers
 
 We recognize this challenge may not suit the needs of backend orientated engineers. If you are applying for a backend role, here are some optional ideas to tailor the challenge to your skillset. These ideas may or may not directly correlate to the description above.
 
