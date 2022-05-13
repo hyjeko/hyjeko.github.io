@@ -1,6 +1,6 @@
 ## Description
 
-Thanks to your [Part 107 Commercial Drone Pilot's license](https://www.faa.gov/uas/), you've been hired by an electrical company to inspect power lines using aerial drone videography. To understand if you are legally allowed to fly in this area, you've requested data from the FAA to indicate what airspace near your flight(s) - if any - is [controlled](https://www.faa.gov/uas/recreational_fliers/where_can_i_fly/airspace_101/) and thus not approved for drone flights. The FAA returned to you an array of coordinates in [geoJson](https://geojson.org/) representing a polygon of controlled airspace, which is a "no fly zone". Your job is to add functionality to an existing web application to provide this insight.
+Thanks to your [Part 107 Commercial Drone Pilot's license](https://www.faa.gov/uas/commercial_operators/), you've been hired by an electrical company to inspect power lines using aerial drone videography. To understand if you are legally allowed to fly in this area, you've requested data from the FAA to indicate what airspace near your flight(s) - if any - is [controlled](https://www.faa.gov/uas/recreational_fliers/where_can_i_fly/airspace_101/) and thus not approved for drone flights. The FAA returned to you an array of coordinates in [GeoJSON](https://geojson.org/) representing a polygon of controlled airspace, which is a "no fly zone". Your job is to add functionality to an existing web application to provide this insight.
 
 ## Requirements
 
@@ -18,7 +18,7 @@ If you are applying for the Frontend Developer position, completing the above re
 
 At Airspace Link, we feel strongly about good communication. Make sure to provide a short `README.md` which explains your approach. Pay attention to grammar; good writing will always win us over. You also might include a list of ideas you'd love to tackle if you had infinite time to work on the app.
 
-This challenge should not take more than 2-3 hours. You now have the base requirements, but we **strongly** encourage going above and beyond by choosing an extra credit idea below. This is your chance to show off your skills and creativity! We understand that doing your best work can often take significant time, but please try to finish within one week. When it's ready, send us a link to the completed project. Please make your repo private and give access to `fieldsco`, `ghoti143`, and `AnthonyHewins`.
+This challenge should not take more than 2-3 hours. You now have the base requirements, but we **strongly** encourage going above and beyond by choosing an extra credit idea below. This is your chance to show off your skills and creativity! We understand that doing your best work can often take significant time, but please try to finish within one week. When it's ready, send us a link to the completed project. Please make your repo private and give access to [fieldsco](https://github.com/fieldsco), [ghoti143](https://github.com/ghoti143), and [AnthonyHewins](https://github.com/AnthonyHewins).
 
 #### Extra credit ideas
 
@@ -26,6 +26,7 @@ This challenge should not take more than 2-3 hours. You now have the base requir
 - Update the intersection graphic and computed area when the sketch is moved (i.e. clicked and dragged)
 - Provide a layer control to toggle the visibility of your flight area
 - Add unit/snapshot tests
+- [MapStore](/src/stores/MapStore.ts) might be getting a bit bloated. Time for refactoring?
 - <insert your awesome idea here!>
 
 ## For Backend Developers
@@ -67,8 +68,10 @@ It is assumed that you already have `node` and `yarn` installed on your machine.
 
 ### Run tests
 
-See documentation on writing tests at [Testing Library](https://testing-library.com/docs/)
 `yarn test`
+
+See documentation on writing tests at [Testing Library](https://testing-library.com/docs/)
+
 
 ## Technologies included in this template
 
