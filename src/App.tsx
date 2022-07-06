@@ -13,7 +13,7 @@ const Info = styled.p`
   color: white;
   padding: 10px;
   height: 100px;
-  width: 200px;
+  width: 500px;
 `;
 
 const App = () => {
