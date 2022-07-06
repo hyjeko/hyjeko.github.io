@@ -14,7 +14,11 @@ We have provided a starter web application that has just about everything you ne
 
 #### Notes
 
-If you are applying for the Frontend Developer position, completing the above requirements will suffice. If you are applying for Full Stack Developer, you may want to show your backend skills by spinning up an API to handle the "Can I Fly?" logic. Whether you combine frontend and backend into one challenge is up to you.
+If you are applying for the Frontend Developer position, completing the above requirements will suffice. If you are applying for Backend or Full Stack Developer, you may want to tailor the challenge to demonstrate your backend skills. Whether you combine frontend and backend into one challenge is up to you. Here are some backend ideas:
+
+- Spin up a simple API to handle the "Can I Fly?" logic in the language of your choice (Golang preferred, but not required)
+- Using an origin and destination point (lat/lng) on opposite sides of the GeoJSON polygon defined in `src/sample.ts`, algorithmically generate a set of waypoints that navigates around the polygon
+- Using open source tooling, dynamically serve the GeoJSON polygon defined in `src/sample.ts` as a vector tile layer, adhering to the [vector tile](https://github.com/mapbox/vector-tile-spec/tree/master/2.1/) specification
 
 At Airspace Link, we feel strongly about good communication. Make sure to provide a short `README.md` which explains your approach. Pay attention to grammar; good writing will always win us over. You also might include a list of ideas you'd love to tackle if you had infinite time to work on the app.
 
@@ -27,15 +31,6 @@ This challenge should not take more than 2-3 hours. You now have the base requir
 - Provide a layer control to toggle the visibility of your flight area
 - Add unit/snapshot tests
 - [MapStore](/src/stores/MapStore.ts) might be getting a bit bloated. Time for refactoring?
-- <insert your awesome idea here!>
-
-## Backend Developers
-
-We recognize this challenge may not suit the needs of backend orientated engineers. If you are applying for a backend role, here are some optional ideas to tailor the challenge to your skillset. These ideas may or may not directly correlate to the description above.
-
-- Spin up a simple API to handle the "Can I Fly?" logic in the language of your choice (Golang preferred)
-- Using an origin and destination point (lat/lng) on opposite sides of the GeoJSON polygon defined in `src/sample.ts`, algorithmically generate a set of waypoints that navigates around the polygon
-- Using open source tooling, dynamically serve the GeoJSON polygon defined in `src/sample.ts` as a vector tile layer. Adhering to the [vector tile](https://github.com/mapbox/vector-tile-spec/tree/master/2.1/) specification
 - <insert your awesome idea here!>
 
 ## Setup instructions
