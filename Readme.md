@@ -4,21 +4,26 @@ Thanks to your [Part 107 Commercial Drone Pilot's license](https://www.faa.gov/u
 
 ## Requirements
 
-We have provided a starter web application that has just about everything you need to accomplish the task. The application setup instructions are below. Once you have the app up and running, you will see the polygon of controlled "no fly" airspace on the map. Using the sketch tool you can draw shapes of your various flight areas on the map. After a sketch is complete, your work should display which portion - if any - of the sketch is in controlled airspace (i.e. any area that intersects the controlled airspace polygon).
+We have provided a starter web application that has just about everything you need to accomplish the task. The application setup instructions are below. Once you have the app up and running, you will see the polygon of controlled "no fly" airspace on the map. Using the sketch tool you can draw shapes of your various flight areas on the map. This challenge should not take more than a few hours.
 
-- Search the code for "HINT" - these will help you along
+- Search the code for "HINT" - these will help you along. The MapStore has links to all the documentation you will need.
 - Display a message in the `Info` component indicating whether this flight will be denied (**it intersects**) or approved (**it does not intersect**)
 - Display the area (in sq meters or sq kilometers) of the intersection, if any
 - It'd also be great to see the intersection shape highlighted with a different color so that it is easy to visualize
+- Write some basic CSS to make the `Info` component a little more visually pleasing. There is no one "right" way to do this - get creative!
+- Write a couple simple media queries to adjust the width of the `Info` component as the browser width is narrowed, such that the sketch tools do not overlap
 - When you are finished, run `yarn lint` and fix any linting errors that may have been introduced by your code
+- At Airspace Link, we feel strongly about good communication. Make sure to provide a short `README.md` which explains your approach. Pay attention to grammar; good writing will always win us over. You also might include a list of ideas you'd love to tackle if you had infinite time to work on the app.
+
+If you are applying for the Frontend Developer position, completing the above requirements will suffice. If you are applying for Backend or Full Stack Developer, you may want to tailor the challenge to demonstrate your backend skills. Whether you combine frontend and backend into one challenge is up to you. Here are some backend ideas:
+
+- Spin up a simple API to handle the "Can I Fly?" logic in the language of your choice (Golang preferred, but not required)
+- Using an origin and destination point (lat/lng) on opposite sides of the GeoJSON polygon defined in `src/sample.ts`, algorithmically generate a set of waypoints that navigates around the polygon
+- Using open source tooling, dynamically serve the GeoJSON polygon defined in `src/sample.ts` as a vector tile layer, adhering to the [vector tile](https://github.com/mapbox/vector-tile-spec/tree/master/2.1/) specification
 
 #### Notes
 
-If you are applying for the Frontend Developer position, completing the above requirements will suffice. If you are applying for Full Stack Developer, you may want to show your backend skills by spinning up an API to handle the "Can I Fly?" logic. Whether you combine frontend and backend into one challenge is up to you.
-
-At Airspace Link, we feel strongly about good communication. Make sure to provide a short `README.md` which explains your approach. Pay attention to grammar; good writing will always win us over. You also might include a list of ideas you'd love to tackle if you had infinite time to work on the app.
-
-This challenge should not take more than 2-3 hours. You now have the base requirements, but we **strongly** encourage going above and beyond by choosing an extra credit idea below. This is your chance to show off your skills and creativity! We understand that doing your best work can often take significant time, but please try to finish within one week. When it's ready, send us a link to the completed project. Please make your repo private and give access to [fieldsco](https://github.com/fieldsco), [ghoti143](https://github.com/ghoti143), and [AnthonyHewins](https://github.com/AnthonyHewins).
+You now have the base requirements, but we **strongly** encourage going above and beyond by choosing an extra credit idea below. This is your chance to show off your skills and creativity! We understand that doing your best work can often take significant time, but please try to finish within one week. When it's ready, send us a link to the completed project. Please make your repo private and give access to [fieldsco](https://github.com/fieldsco), [ghoti143](https://github.com/ghoti143), and [AnthonyHewins](https://github.com/AnthonyHewins).
 
 #### Extra credit ideas
 
@@ -27,15 +32,6 @@ This challenge should not take more than 2-3 hours. You now have the base requir
 - Provide a layer control to toggle the visibility of your flight area
 - Add unit/snapshot tests
 - [MapStore](/src/stores/MapStore.ts) might be getting a bit bloated. Time for refactoring?
-- <insert your awesome idea here!>
-
-## Backend Developers
-
-We recognize this challenge may not suit the needs of backend orientated engineers. If you are applying for a backend role, here are some optional ideas to tailor the challenge to your skillset. These ideas may or may not directly correlate to the description above.
-
-- Spin up a simple API to handle the "Can I Fly?" logic in the language of your choice (Golang preferred)
-- Using an origin and destination point (lat/lng) on opposite sides of the GeoJSON polygon defined in `src/sample.ts`, algorithmically generate a set of waypoints that navigates around the polygon
-- Using open source tooling, dynamically serve the GeoJSON polygon defined in `src/sample.ts` as a vector tile layer. Adhering to the [vector tile](https://github.com/mapbox/vector-tile-spec/tree/master/2.1/) specification
 - <insert your awesome idea here!>
 
 ## Setup instructions
@@ -72,8 +68,7 @@ It is assumed that you already have `node` and `yarn` installed on your machine.
 
 See documentation on writing tests at [Testing Library](https://testing-library.com/docs/)
 
-
-## Technologies included in this template
+## Technologies included in this repo
 
 - [TypeScript](https://www.typescriptlang.org/): Extends JavaScript to adding data types
 - [React](https://reactjs.org/): Rendering engine for interactive UIs. Includes setup with react-refresh for hot module reloading.
