@@ -4,13 +4,14 @@ Thanks to your [Part 107 Commercial Drone Pilot's license](https://www.faa.gov/u
 
 ## Requirements
 
-We have provided a starter web application that has just about everything you need to accomplish the task. The application setup instructions are below. Once you have the app up and running, you will see the polygon of controlled "no fly" airspace on the map. Using the sketch tool you can draw shapes of your various flight areas on the map.
+We have provided a starter web application that has just about everything you need to accomplish the task. The application setup instructions are below. Once you have the app up and running, you will see the polygon of controlled "no fly" airspace on the map. Using the sketch tool you can draw shapes of your various flight areas on the map. This challenge should not take more than a few hours.
 
-- Search the code for "HINT" - these will help you along
+- Search the code for "HINT" - these will help you along. The MapStore has links to all the documentation you will need.
 - Display a message in the `Info` component indicating whether this flight will be denied (**it intersects**) or approved (**it does not intersect**)
 - Display the area (in sq meters or sq kilometers) of the intersection, if any
 - It'd also be great to see the intersection shape highlighted with a different color so that it is easy to visualize
-- Write a couple simple media queries to adjust the width of the `Info` component as the browser width is narrowed, such that the sketch tools do not overlap it.
+- Write some basic CSS to make the `Info` component a little more visually pleasing. There is no one "right" way to do this - get creative!
+- Write a couple simple media queries to adjust the width of the `Info` component as the browser width is narrowed, such that the sketch tools do not overlap
 - When you are finished, run `yarn lint` and fix any linting errors that may have been introduced by your code
 - At Airspace Link, we feel strongly about good communication. Make sure to provide a short `README.md` which explains your approach. Pay attention to grammar; good writing will always win us over. You also might include a list of ideas you'd love to tackle if you had infinite time to work on the app.
 
@@ -22,7 +23,7 @@ If you are applying for the Frontend Developer position, completing the above re
 
 #### Notes
 
-This challenge should not take more than 2-3 hours. You now have the base requirements, but we **strongly** encourage going above and beyond by choosing an extra credit idea below. This is your chance to show off your skills and creativity! We understand that doing your best work can often take significant time, but please try to finish within one week. When it's ready, send us a link to the completed project. Please make your repo private and give access to [fieldsco](https://github.com/fieldsco), [ghoti143](https://github.com/ghoti143), and [AnthonyHewins](https://github.com/AnthonyHewins).
+You now have the base requirements, but we **strongly** encourage going above and beyond by choosing an extra credit idea below. This is your chance to show off your skills and creativity! We understand that doing your best work can often take significant time, but please try to finish within one week. When it's ready, send us a link to the completed project. Please make your repo private and give access to [fieldsco](https://github.com/fieldsco), [ghoti143](https://github.com/ghoti143), and [AnthonyHewins](https://github.com/AnthonyHewins).
 
 #### Extra credit ideas
 
