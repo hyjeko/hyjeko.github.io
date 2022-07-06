@@ -4,15 +4,15 @@ Thanks to your [Part 107 Commercial Drone Pilot's license](https://www.faa.gov/u
 
 ## Requirements
 
-We have provided a starter web application that has just about everything you need to accomplish the task. The application setup instructions are below. Once you have the app up and running, you will see the polygon of controlled "no fly" airspace on the map. Using the sketch tool you can draw shapes of your various flight areas on the map. After a sketch is complete, your work should display which portion - if any - of the sketch is in controlled airspace (i.e. any area that intersects the controlled airspace polygon).
+We have provided a starter web application that has just about everything you need to accomplish the task. The application setup instructions are below. Once you have the app up and running, you will see the polygon of controlled "no fly" airspace on the map. Using the sketch tool you can draw shapes of your various flight areas on the map.
 
 - Search the code for "HINT" - these will help you along
 - Display a message in the `Info` component indicating whether this flight will be denied (**it intersects**) or approved (**it does not intersect**)
 - Display the area (in sq meters or sq kilometers) of the intersection, if any
 - It'd also be great to see the intersection shape highlighted with a different color so that it is easy to visualize
+- Write a couple simple media queries to adjust the width of the `Info` component as the browser width is narrowed, such that the sketch tools do not overlap it.
 - When you are finished, run `yarn lint` and fix any linting errors that may have been introduced by your code
-
-#### Notes
+- At Airspace Link, we feel strongly about good communication. Make sure to provide a short `README.md` which explains your approach. Pay attention to grammar; good writing will always win us over. You also might include a list of ideas you'd love to tackle if you had infinite time to work on the app.
 
 If you are applying for the Frontend Developer position, completing the above requirements will suffice. If you are applying for Backend or Full Stack Developer, you may want to tailor the challenge to demonstrate your backend skills. Whether you combine frontend and backend into one challenge is up to you. Here are some backend ideas:
 
@@ -20,7 +20,7 @@ If you are applying for the Frontend Developer position, completing the above re
 - Using an origin and destination point (lat/lng) on opposite sides of the GeoJSON polygon defined in `src/sample.ts`, algorithmically generate a set of waypoints that navigates around the polygon
 - Using open source tooling, dynamically serve the GeoJSON polygon defined in `src/sample.ts` as a vector tile layer, adhering to the [vector tile](https://github.com/mapbox/vector-tile-spec/tree/master/2.1/) specification
 
-At Airspace Link, we feel strongly about good communication. Make sure to provide a short `README.md` which explains your approach. Pay attention to grammar; good writing will always win us over. You also might include a list of ideas you'd love to tackle if you had infinite time to work on the app.
+#### Notes
 
 This challenge should not take more than 2-3 hours. You now have the base requirements, but we **strongly** encourage going above and beyond by choosing an extra credit idea below. This is your chance to show off your skills and creativity! We understand that doing your best work can often take significant time, but please try to finish within one week. When it's ready, send us a link to the completed project. Please make your repo private and give access to [fieldsco](https://github.com/fieldsco), [ghoti143](https://github.com/ghoti143), and [AnthonyHewins](https://github.com/AnthonyHewins).
 
@@ -67,8 +67,7 @@ It is assumed that you already have `node` and `yarn` installed on your machine.
 
 See documentation on writing tests at [Testing Library](https://testing-library.com/docs/)
 
-
-## Technologies included in this template
+## Technologies included in this repo
 
 - [TypeScript](https://www.typescriptlang.org/): Extends JavaScript to adding data types
 - [React](https://reactjs.org/): Rendering engine for interactive UIs. Includes setup with react-refresh for hot module reloading.
