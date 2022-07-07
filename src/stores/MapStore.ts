@@ -7,34 +7,101 @@ import * as geometryEngine from '@arcgis/core/geometry/geometryEngine';
 import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import Graphic from '@arcgis/core/Graphic';
 import Polygon from '@arcgis/core/geometry/Polygon';
-import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
+//TODO: unused import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 
+const SPATIAL_REFERENCE_WELL_KNOWN_ID = 102100
+/**
+ * MapStore represents the mobx store for the Map Component to consume. 
+ * It is exposed through the custom context hook "useStore"
+ * 
+ * @field rootStore
+ * @field map
+ * @field noFlyLayer
+ * @field sketchLayer
+ * @field sketch
+ * @field sketchState
+ * @field exampleObservableState
+ */
 export default class MapStore {
+  //Root
   rootStore: RootStore;
+  //arcgis
   map!: __esri.Map;
   noFlyLayer!: __esri.GraphicsLayer;
   sketchLayer!: __esri.GraphicsLayer;
   sketch!: __esri.Sketch;
-  sketchState!: string;
+  //Customs
+  sketchState!: string; //sketchState is a custom observable property
+  intersectingAreas!: number[]; //exploration example 
+  // ^
+  // Notice this '!' modifier.
+  // This is the "definite assignment assertion" 
+  // the definite assignment assertion operator is the dual (cousin) of the non-null assertion operator (in which expressions are post-fixed with a !)
 
+  /**
+   * Create a new instance of MapStore given a rootStore
+   * @param rootStore 
+   */
   constructor(rootStore: RootStore) {
     // HINT: you can add additional observable properties to this class
     // https://mobx.js.org/observable-state.html
-    makeObservable(this, { sketchState: observable, setSketchState: action });
+
+    const annotations = {
+      sketchState: observable, 
+      setSketchState: action,
+      intersectingAreas: observable,
+      setIntersectingAreas: action
+    };
+    
+    //makeObservable(target, annotations?, options?)
+    makeObservable(this, annotations);
+
+    //observable(source, overrides?, options?
+
+    //makeAutoObservable(target, overrides?, options?)
+
     this.rootStore = rootStore;
     this.setSketchState('idle');
+    this.setIntersectingAreas(observable([]));
   }
 
+  /**
+   * Set the Sketch State
+   * @param state 
+   */
   setSketchState(state: string) {
+    console.log("setSketchState(state): ", state);
     this.sketchState = state;
   }
 
-  constructMap(container: string) {
-    this.sketchLayer = new GraphicsLayer();
-    this.noFlyLayer = new GraphicsLayer();
+  /**
+   * Set the example observable state
+   */
+   setIntersectingAreas(state: number[]) {
+    this.intersectingAreas = state
+   }
 
-    // Define a symbol
+
+  /**
+   * Create a new mapStore by doing the following
+   * 1. sketchLayer = new GraphicsLayer
+   * 2. noFlyLayer = new GraphicsLayer
+   * 3. noFlyLayer add new Graphic based on symbol and FAA data
+   * 4. map = new ArcGISMap create map and add sketchLayer and noFlyLayer
+   * 5. view = new MapView create new map view with options
+   * 6. sketch = new Sketch when view is ready use callback function to add sketch to view
+   * @param container 
+   */
+  constructMap(container: string) {
+    this.sketchLayer = new GraphicsLayer(); //arcgis
+    this.noFlyLayer = new GraphicsLayer(); //arcgis
+
     // https://developers.arcgis.com/javascript/latest/api-reference/esri-symbols-SimpleFillSymbol.html
+    /** SimpleFillSymbol is used for rendering 2D polygons in either a MapView or a SceneView.
+     * It can be filled with a solid color, or a pattern. 
+     * In addition, the symbol can have an optional outline, which is defined by a SimpleLineSymbol. */
+
+    //Give some style to the map graphic below
     const symbol = {
       type: 'simple-fill',
       color: [51, 51, 204, 0.2],
@@ -46,11 +113,13 @@ export default class MapStore {
     };
 
     // Construct map graphic
-    // https://developers.arcgis.com/javascript/latest/api-reference/esri-Graphic.html
+    // https://developers.arcgis.com/j avascript/latest/api-reference/esri-Graphic.html
     this.noFlyLayer.add(
+      // This is the NO_FLY area graphic supplied to us by the FAA
+      // Opportunity to make this data RESTful
       new Graphic({
         geometry: new Polygon({
-          spatialReference: { wkid: 102100 },
+          spatialReference: { wkid: SPATIAL_REFERENCE_WELL_KNOWN_ID }, //This indicates the projected or geographic coordinate system used to locate geographic features in the map (mapProjection function)
           rings: [
             [
               [-9278977.502393615, 5196972.662366206],
@@ -102,38 +171,91 @@ export default class MapStore {
 
       this.sketch.on('create', this.sketchCreate);
     });
-  }
+  }//END constructMap
 
-  sketchCreate = async (event: __esri.SketchCreateEvent) => {
-    this.setSketchState(event.state);
-    if (event.state !== 'complete') return;
+  /**
+   * Async function to create sketches. 
+   * @param event SketchCreateEvent interface event
+   * @returns used to exit
+   */
+  sketchCreate = async (event: __esri.SketchCreateEvent) => {//HINT: why async if no await?
+    console.log("------------- sketchCreate = async (event: __esri.SketchCreateEvent) ------------------------")
+    console.log("sketchCrate() invoked with event: ", event);
+    console.log("calling this.setSketchState(event.state): ", event.state);
+    this.setSketchState(event.state); //sync the event state with the store state
 
-    // THERE ARE 3 STEPS TO SATISFYING THE BASE REQUIREMENTS FOR THE CHALLENGE
-    // STEP 1: determine if the sketch's graphic intersects with the graphic in the noFlyLayer
-    // STEP 2: if it intersects, compute the area of the intersection, and display it
-    // STEP 3: create a new graphic with any possible intersection, and display it on the map
+    //guard if the state is incomplete
+    if (event.state !== 'complete') {
+      console.warn("sketchCreate() invoked with event.state !== 'complete: '", event.state)
+      return
+    }
 
     // HINT: the event has a graphic property which has a geometry property
     // https://developers.arcgis.com/javascript/latest/api-reference/esri-geometry-Geometry.html
+    const inputGraphic = event.graphic;
+    console.log("eventGraphic: ", event.graphic)
 
     // HINT: you can use getItemAt to access one of the graphics of the noFlyLayer.
     // https://developers.arcgis.com/javascript/latest/api-reference/esri-core-Collection.html#getItemAt
-    // https://developers.arcgis.com/javascript/latest/api-reference/esri-Graphic.html
+    const noFlyLayerGraphic = this.noFlyLayer.graphics.getItemAt(0);
+    console.log("noFlyLayerGraphic: ", noFlyLayerGraphic);
 
-    // HINT: you can use the geometry engine to calculate the intersection of two geometries
-    // https://developers.arcgis.com/javascript/latest/api-reference/esri-geometry-geometryEngine.html#intersect
+    // THERE ARE 4 STEPS TO SATISFYING THE BASE REQUIREMENTS FOR THE CHALLENGE
+    // STEP 1: determine if the sketch's graphic intersects with the graphic in the noFlyLayer
+    if (doesIntersect(inputGraphic, noFlyLayerGraphic)) {
+      console.info("Found intersecting input graphic with ", inputGraphic, noFlyLayerGraphic);
 
-    // HINT: you can use the geometry engine to calculate area of a polygon
-    // https://developers.arcgis.com/javascript/latest/api-reference/esri-geometry-geometryEngine.html#geodesicArea
+      // STEP 2: if it intersects, compute the area of the intersection, and display it
+      const intersectionGeometry = computeIntersectionGeometry(inputGraphic, noFlyLayerGraphic);
+      const intersectionArea = computeIntersectionArea(intersectionGeometry as Polygon);
 
-    // HINT: you can create a graphic using a Graphic object
-    // https://developers.arcgis.com/javascript/latest/api-reference/esri-Graphic.html#symbol
+      console.log("intersectionGeometry", intersectionGeometry);
+      console.log("intersectionArea", intersectionArea);
+      const updatedIntersectingArea = [...this.intersectingAreas, intersectionArea];
+      this.setIntersectingAreas(updatedIntersectingArea);
 
-    // HINT: you can provide a symbol when creating this graphic to change its appearance
-    // https://developers.arcgis.com/javascript/latest/sample-code/playground/live/index.html#/config=symbols/2d/SimpleFillSymbol.json
+      // HINT: you can provide a symbol when creating this graphic to change its appearance
+      // https://developers.arcgis.com/javascript/latest/sample-code/playground/live/index.html#/config=symbols/2d/SimpleFillSymbol.json
+      const symbol = {
+        type: 'simple-fill',
+        color: [255, 192, 203, 0.8],
+        style: 'solid',
+        outline: {
+          color: 'red',
+          width: 2,
+        },
+      };
+      
+      // STEP 3: create a new graphic with any possible intersection, and display it on the map
+      // HINT: you can create a graphic using a Graphic object
+      // https://developers.arcgis.com/javascript/latest/api-reference/esri-Graphic.html#symbol
+      const intersectGraphic = new Graphic({
+        geometry: intersectionGeometry as Polygon,//needs polygon
+        symbol,//needs symbol
+      })
 
-    // HINT: you can add a new Graphic to this.sketchLayer to display it on the map
-    // https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-GraphicsLayer.html#add
+      // STEP 4: display new graphic on map
+      // https://developers.arcgis.com/javascript/latest/api-reference/esri-layers-GraphicsLayer.html#add
+      this.sketchLayer.graphics.add(intersectGraphic);
+    } else {
+      console.info("Input Graphic does not Intersect any Graphics in the NoFlyLayer")
+    }
+
+    function doesIntersect(graphicOne: Graphic, graphicTwo: Graphic): boolean {
+      return geometryEngine.intersects(graphicOne.geometry, graphicTwo.geometry);
+    }
+
+    function computeIntersectionGeometry(graphicOne: Graphic, graphicTwo: Graphic): __esri.Geometry | __esri.Geometry[] {
+      // HINT: you can use the geometry engine to calculate the intersection of two geometries
+      // https://developers.arcgis.com/javascript/latest/api-reference/esri-geometry-geometryEngine.html#intersect
+      return geometryEngine.intersect(graphicOne.geometry, graphicTwo.geometry)
+    }
+
+    function computeIntersectionArea(polygon:  Polygon): number {
+      // HINT: you can use the geometry engine to calculate area of a polygon
+      // https://developers.arcgis.com/javascript/latest/api-reference/esri-geometry-geometryEngine.html#geodesicArea
+      return geometryEngine.geodesicArea(polygon, "square-miles");
+    }
   };
 
   cleanup() {
