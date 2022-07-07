@@ -21,12 +21,14 @@ const InfoContainer = styled.div`
 //Root App Component Defintion
 const App = () => {
   const { mapStore } = useStore();
+
   return (
     <>
-      {/* HINT: you can bind to properties in the map store like this: */}
       <InfoContainer>
-        <Info>{`Sketch State: ${mapStore.sketchState}`}</Info>
-        {mapStore.intersectingAreas.map((value, index) => <Info key={"Info-"+index}>{`Intersecting Area for shape ${index}: ${value}sq miles`}</Info>)}
+        {mapStore.intersectingAreas.length === 0 && <Info>{'No intersecting flights'}</Info>}
+        {mapStore.intersectingAreas.map((value, index) => {
+          return <Info key={"Info-"+index}>{`Intersecting Area for sketch ${index}: has intersecting area ${value} sq miles`}</Info>;
+        })}
       </InfoContainer>
       <Map />
     </>

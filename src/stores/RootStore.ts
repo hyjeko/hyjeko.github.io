@@ -12,6 +12,10 @@ configure({
   disableErrorBoundaries: true,
 });
 
+/**
+ * This class represents the mobx RootStore for the app.
+ * @property mapStore the mapStore to hold in root
+ */
 export default class RootStore {
   mapStore: MapStore;
 
@@ -22,7 +26,7 @@ export default class RootStore {
 
 // Create a new store context
 const store = new RootStore();
-const storeContext = createContext(store);
+const StoreContext = createContext(store);
 
 // Hook to use store in any functional component
-export const useStore = () => useContext(storeContext);
+export const useStore = () => useContext(StoreContext);
