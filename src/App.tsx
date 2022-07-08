@@ -25,8 +25,8 @@ const App = () => {
   return (
     <>
       <InfoContainer>
-        {mapStore.intersectingAreas.length === 0 && <Info>{'No intersecting flights'}</Info>}
-        {mapStore.intersectingAreas.map((value, index) => {
+        {mapStore.getIntersectingAreas.length === 0 && <Info>{'No intersecting flights'}</Info>}
+        {mapStore.getIntersectingAreas.map((value, index) => {
           return <Info key={"Info-"+index}>{`Intersecting Area for sketch ${index}: has intersecting area ${value} sq miles`}</Info>;
         })}
       </InfoContainer>

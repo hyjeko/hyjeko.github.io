@@ -1,12 +1,13 @@
-const webpack = require('webpack');
+/* eslint-disable @typescript-eslint/no-var-requires */
+// const webpack = require('webpack');
 const path = require('path');
 const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyPlugin = require('copy-webpack-plugin');
+//const CopyPlugin = require('copy-webpack-plugin');
 const { merge } = require('webpack-merge');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ArcGISPlugin = require('@arcgis/webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+//const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
@@ -153,9 +154,7 @@ const developmentConfig = {
   },
 
   plugins: [
-    new ReactRefreshPlugin(),
-    // Enable HMR globally
-    new webpack.HotModuleReplacementPlugin(),
+    new ReactRefreshPlugin()
   ],
 
   // Setup development server
@@ -184,15 +183,15 @@ const productionConfig = {
       maxInitialRequests: 30,
       enforceSizeThreshold: 50000,
       cacheGroups: {
-        // esriVendor: {
-        //   test: /[\\/]node_modules[\\/](@arcgis)[\\/]/,
-        //   name: 'esri',
-        // },
+        esriVendor: {
+          test: /[\\/]node_modules[\\/](@arcgis)[\\/]/,
+          name: 'esri',
+        },
         vendors: {
           test: /[\\/]node_modules[\\/]/,
           priority: -10,
-          chunks: 'initial', // Remove this line if you don't want a single common vendors chunk
-          name: 'vendors', // Remove this line if you don't want a single common vendors chunk
+          //chunks: 'initial', // Remove this line if you don't want a single common vendors chunk
+          //name: 'vendors', // Remove this line if you don't want a single common vendors chunk
         },
         default: {
           minChunks: 2,
@@ -209,6 +208,7 @@ const productionConfig = {
  * MERGE THE COMMON CONFIG INTO EITHER DEV OR PRODUCTION
  *
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 module.exports = env => {
   if (isDevelopment) {
     return merge(commonConfig, developmentConfig);

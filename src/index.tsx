@@ -3,11 +3,9 @@ import './style/main.scss';
 //import "antd/lib/button/style/index.css";
 
 import React from 'react';
-import { render } from 'react-dom';
 import App from './App';
+import { createRoot } from 'react-dom/client';
 
-function renderApp() {
-  render(<App />, document.getElementById('root'));
-}
-
-renderApp();
+const container = document.getElementById('root');
+const root = createRoot(container!);
+root.render(<App/>)

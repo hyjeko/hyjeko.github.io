@@ -1,4 +1,4 @@
-import { action, makeObservable, observable } from 'mobx';
+import { action, computed, makeObservable, observable } from 'mobx';
 import RootStore from './RootStore';
 import ArcGISMap from '@arcgis/core/Map';
 import MapView from '@arcgis/core/views/MapView';
@@ -30,9 +30,9 @@ export default class MapStore {
   noFlyLayer!: __esri.GraphicsLayer;
   sketchLayer!: __esri.GraphicsLayer;
   sketch!: __esri.Sketch;
-  //Customs
+  //UI
   sketchState!: string;
-  intersectingAreas!: number[];
+  intersectingAreas: number[] = observable.array();
 
   /**
    * Create a new instance of MapStore given a rootStore
@@ -43,12 +43,12 @@ export default class MapStore {
       sketchState: observable,
       setSketchState: action,
       intersectingAreas: observable,
-      setIntersectingAreas: action,
+      addIntersectingArea: action,
+      getIntersectingAreas: computed,
     };
     makeObservable(this, annotations);
     this.rootStore = rootStore;
     this.setSketchState('idle');
-    this.setIntersectingAreas(observable([]));
   }
 
   /**
@@ -77,10 +77,20 @@ export default class MapStore {
   }
 
   /**
-   * Set the intersecting areas state
+   * Append the area to the intersecting area array
+   * @param area area to add to array
    */
-  setIntersectingAreas(state: number[]) {
-    this.intersectingAreas = observable(state);
+  addIntersectingArea(area: number) {
+    this.intersectingAreas.push(area);
+  }
+
+  /**
+   * expose observable array as slice
+   * @return the current intersecting area array
+   */
+  get getIntersectingAreas(): number[] {
+    console.log('getIntersectingAreas()');
+    return this.intersectingAreas.slice();
   }
 
   /**
@@ -92,7 +102,6 @@ export default class MapStore {
     /** SimpleFillSymbol is used for rendering 2D polygons in either a MapView or a SceneView.
      * It can be filled with a solid color, or a pattern.
      * In addition, the symbol can have an optional outline, which is defined by a SimpleLineSymbol. */
-    //Give some style to the map graphic below
     const symbol = {
       type: 'simple-fill',
       color: [51, 51, 204, 0.2],
@@ -129,10 +138,17 @@ export default class MapStore {
     );
   }
 
+  /**
+   * Create the sketch layer
+   */
   constructSketchLayer() {
     this.sketchLayer = new GraphicsLayer();
   }
 
+  /**
+   * Prepare the map view for display
+   * @param container The id or node representing the DOM element containing the view.
+   */
   prepareMapView(container: string) {
     // Set the map view, including location and zoom level
     // https://developers.arcgis.com/javascript/latest/api-reference/esri-views-MapView.html
@@ -191,8 +207,7 @@ export default class MapStore {
       // STEP 2: if it intersects, compute the area of the intersection and display it
       const intersectionGeometry = mapStoreUtils.computeIntersectionGeometry(inputGraphic, noFlyLayerGraphic);
       const intersectionArea = mapStoreUtils.computeIntersectionArea(intersectionGeometry as Polygon);
-      const updatedIntersectingArea = [...this.intersectingAreas, intersectionArea];
-      this.setIntersectingAreas(updatedIntersectingArea);
+      this.addIntersectingArea(intersectionArea);
 
       // HINT: you can provide a symbol when creating this graphic to change its appearance
       // https://developers.arcgis.com/javascript/latest/sample-code/playground/live/index.html#/config=symbols/2d/SimpleFillSymbol.json
@@ -222,7 +237,7 @@ export default class MapStore {
    * @param event
    */
   sketchDelete = (event: __esri.SketchDeleteEvent) => {
-    console.log('sketchDelete');
+    console.log('sketchDelete', event);
   };
 
   cleanup() {
