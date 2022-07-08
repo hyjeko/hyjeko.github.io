@@ -7,7 +7,6 @@ import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import Graphic from '@arcgis/core/Graphic';
 import Polygon from '@arcgis/core/geometry/Polygon';
 import mapStoreUtils from './mapStoreUtils';
-//TODO: unused import SimpleFillSymbol from '@arcgis/core/symbols/SimpleFillSymbol';
 
 const SPATIAL_REFERENCE_WELL_KNOWN_ID = 102100;
 /**
@@ -81,7 +80,11 @@ export default class MapStore {
    * @param area area to add to array
    */
   addIntersectingArea(area: number) {
-    this.intersectingAreas.push(area);
+    observable(this.intersectingAreas).push(area);
+  }
+
+  removeIntersectingArea(area: number) {
+    observable(this.intersectingAreas).remove(area);
   }
 
   /**
@@ -89,7 +92,6 @@ export default class MapStore {
    * @return the current intersecting area array
    */
   get getIntersectingAreas(): number[] {
-    console.log('getIntersectingAreas()');
     return this.intersectingAreas.slice();
   }
 
@@ -98,10 +100,7 @@ export default class MapStore {
    */
   constructNoFlyLayer() {
     this.noFlyLayer = new GraphicsLayer();
-    // https://developers.arcgis.com/javascript/latest/api-reference/esri-symbols-SimpleFillSymbol.html
-    /** SimpleFillSymbol is used for rendering 2D polygons in either a MapView or a SceneView.
-     * It can be filled with a solid color, or a pattern.
-     * In addition, the symbol can have an optional outline, which is defined by a SimpleLineSymbol. */
+    //auto cast as simple-fill
     const symbol = {
       type: 'simple-fill',
       color: [51, 51, 204, 0.2],
@@ -113,10 +112,8 @@ export default class MapStore {
     };
 
     // Construct map graphic
-    // https://developers.arcgis.com/javascript/latest/api-reference/esri-Graphic.html
     this.noFlyLayer.add(
       // This is the NO_FLY area graphic supplied to us by the FAA
-      // Opportunity to make this data RESTful
       new Graphic({
         geometry: new Polygon({
           spatialReference: { wkid: SPATIAL_REFERENCE_WELL_KNOWN_ID }, //This indicates the projected or geographic coordinate system used to locate geographic features in the map (mapProjection function)
@@ -150,8 +147,6 @@ export default class MapStore {
    * @param container The id or node representing the DOM element containing the view.
    */
   prepareMapView(container: string) {
-    // Set the map view, including location and zoom level
-    // https://developers.arcgis.com/javascript/latest/api-reference/esri-views-MapView.html
     const view = new MapView({
       map: this.map,
       container,
@@ -159,8 +154,6 @@ export default class MapStore {
       zoom: 11,
     });
 
-    // When the view finishes loading, add the sketch widget
-    // https://developers.arcgis.com/javascript/latest/api-reference/esri-widgets-Sketch.html
     view.when(() => {
       this.sketch = new Sketch({
         layer: this.sketchLayer,
@@ -181,23 +174,15 @@ export default class MapStore {
   }
 
   /**
-   * Async function to create sketches.
+   * Add sketch based on event
    * @param event SketchCreateEvent interface event
-   * @returns used to exit
+   * @returns exit
    */
   sketchCreate = (event: __esri.SketchCreateEvent) => {
-    //HINT: why async if no await?
-    this.setSketchState(event.state); //sync the event state with the store state
-
-    //guard if the state is incomplete
+    this.setSketchState(event.state);
     if (event.state !== 'complete') return;
 
-    // HINT: the event has a graphic property which has a geometry property
-    // https://developers.arcgis.com/javascript/latest/api-reference/esri-geometry-Geometry.html
     const inputGraphic = event.graphic;
-
-    // HINT: you can use getItemAt to access one of the graphics of the noFlyLayer.
-    // https://developers.arcgis.com/javascript/latest/api-reference/esri-core-Collection.html#getItemAt
     const noFlyLayerGraphic = this.noFlyLayer.graphics.getItemAt(0);
 
     // THERE ARE 3 STEPS TO SATISFYING THE BASE REQUIREMENTS FOR THE CHALLENGE
@@ -209,8 +194,7 @@ export default class MapStore {
       const intersectionArea = mapStoreUtils.computeIntersectionArea(intersectionGeometry as Polygon);
       this.addIntersectingArea(intersectionArea);
 
-      // HINT: you can provide a symbol when creating this graphic to change its appearance
-      // https://developers.arcgis.com/javascript/latest/sample-code/playground/live/index.html#/config=symbols/2d/SimpleFillSymbol.json
+      // autocasts as new SimpleFillSymbol()
       const symbol = {
         type: 'simple-fill',
         color: [255, 192, 203, 0.8],
@@ -233,11 +217,14 @@ export default class MapStore {
   };
 
   /**
-   *
-   * @param event
+   * Delete the sketch based on the event
+   * @param event SketchDelete event
+   * @return exit
    */
   sketchDelete = (event: __esri.SketchDeleteEvent) => {
-    console.log('sketchDelete', event);
+    //TODO delete appropriately instead of removing all
+    console.log('sketchDelete() -> removeAll()', event);
+    this.sketchLayer.removeAll();
   };
 
   cleanup() {

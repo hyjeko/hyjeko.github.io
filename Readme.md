@@ -1,83 +1,54 @@
-## Description
+### Description
 
-Thanks to your [Part 107 Commercial Drone Pilot's license](https://www.faa.gov/uas/commercial_operators/), you've been hired by an electrical company to inspect power lines using aerial drone videography. To understand if you are legally allowed to fly in this area, you've requested data from the FAA to indicate what airspace near your flight(s) - if any - is [controlled](https://www.faa.gov/uas/recreational_fliers/where_can_i_fly/airspace_101/) and thus not approved for drone flights. The FAA returned to you an array of coordinates in [GeoJSON](https://geojson.org/) representing a polygon of controlled airspace, which is a "no fly zone". Your job is to add functionality to an existing web application to provide this insight.
+We need to determine if the area returned by the FAA is in a safe flying zone or not.
 
-## Requirements
+At first this means loading in a hardcoded no fly zone to sketch over (DTW). We would like this data to be restful in the future.
 
-We have provided a starter web application that has just about everything you need to accomplish the task. The application setup instructions are below. Once you have the app up and running, you will see the polygon of controlled "no fly" airspace on the map. Using the sketch tool you can draw shapes of your various flight areas on the map. This challenge should not take more than a few hours.
+### Initial Approach
 
-- Search the code for "HINT" - these will help you along. The MapStore has links to all the documentation you will need.
-- Display a message in the `Info` component indicating whether this flight will be denied (**it intersects**) or approved (**it does not intersect**)
-- Display the area (in sq meters or sq kilometers) of the intersection, if any
-- It'd also be great to see the intersection shape highlighted with a different color so that it is easy to visualize
-- Write some basic CSS to make the `Info` component a little more visually pleasing. There is no one "right" way to do this - get creative!
-- Write a couple simple media queries to adjust the width of the `Info` component as the browser width is narrowed, such that the sketch tools do not overlap
-- When you are finished, run `yarn lint` and fix any linting errors that may have been introduced by your code
-- At Airspace Link, we feel strongly about good communication. Make sure to provide a short `README.md` which explains your approach. Pay attention to grammar; good writing will always win us over. You also might include a list of ideas you'd love to tackle if you had infinite time to work on the app.
+1. Create Trello board to manage work and understand problem
+2. Start app and play with functionality
+3. Open up devtools and inspect
+   - No local storage
+   - No local session
+   - arcGIS.com Cookie
+   - Lighthouse profile
+   - Performance is real bad yikes!
+4. Component Profiler Inspection
+   - A root component with two children, Info and Map
+5. Code Config Impressions
+   - eslintrc.js & .eslintignore
+   - prettier.config.js
+   - gitignore
+   - Babelconfig
+   - Jestconfig
+   - Tsconfig
+   - Webpack.config.js
+   - Added .nvmrc
+6. Begin setup and coding
 
-If you are applying for the Frontend Developer position, completing the above requirements will suffice. If you are applying for Backend or Full Stack Developer, you may want to tailor the challenge to demonstrate your backend skills. Whether you combine frontend and backend into one challenge is up to you. Here are some backend ideas:
+### Setup
 
-- Spin up a simple API to handle the "Can I Fly?" logic in the language of your choice (Golang preferred, but not required)
-- Using an origin and destination point (lat/lng) on opposite sides of the GeoJSON polygon defined in `src/sample.ts`, algorithmically generate a set of waypoints that navigates around the polygon
-- Using open source tooling, dynamically serve the GeoJSON polygon defined in `src/sample.ts` as a vector tile layer, adhering to the [vector tile](https://github.com/mapbox/vector-tile-spec/tree/master/2.1/) specification
+Look through existing code and comment on what is familiar and what is not. I also made the decision to update the packages in the `package.json` -- this should provide some performance gains and bring up the code to spec with the associated docs. Next is identify libraries involved and reading through hints and documentation in order to get a better picture of what the problem is and how to solve it.
 
-#### Notes
+### Base Requirements Approach
 
-You now have the base requirements, but we **strongly** encourage going above and beyond by choosing an extra credit idea below. This is your chance to show off your skills and creativity! We understand that doing your best work can often take significant time, but please try to finish within one week. When it's ready, send us a link to the completed project. Please make your repo private and give access to [fieldsco](https://github.com/fieldsco), [ghoti143](https://github.com/ghoti143), and [AnthonyHewins](https://github.com/AnthonyHewins).
+In order to satisfy the base requirements we need to be able to display to the user if a sketch they just added to the map intersects with the no fly zone provided to us by the FAA. If there is an intersection we also want to display the area of that intersection in meters squared. The user is able to see the flight information in an information panel that is displayed over top the map and sketch tools.
 
-#### Extra credit ideas
+1. Displaying observable data to user
 
-- Deploy your project to [GitHub Pages](https://pages.github.com/) (We acknowledge that in order to do this, you can't make your repo private. That's ok.)
-- Update the intersection graphic and computed area when the sketch is moved (i.e. clicked and dragged)
-- Provide a layer control to toggle the visibility of your flight area
-- Add unit/snapshot tests
-- [MapStore](/src/stores/MapStore.ts) might be getting a bit bloated. Time for refactoring?
-- <insert your awesome idea here!>
+   - intersectingAreas: Array to keep track of which intersecting areas to display to user
+   - sketchState: String to sync the library Sketch state with the mobx sketchState
+   - determining whether or not the flight is valid is based on whether or not the intersectingAreas array is empty or not
 
-## Setup instructions
+2. Displaying intersecting graphic on map
+   - Compare input graphic passed to sketchCreate with the noFlyLayer graphic
+     - Extract the intersection check into its own function for testing and readability
+     - Calculate intersection geometry with small testable function
+     - Calculate intersection area with small testable function
 
-It is assumed that you already have `node` and `yarn` installed on your machine. Google `how to install node` or `how to install yarn` if you need help setting up these environments.
+### Learnings/Notes
 
-### Clone the repo
+I hit a snag when attempting to make the `intersectingAreas` area observable. The code was still functional but mob x was emitting warnings that I was accessing a observable value in a non-reactive context whenever I would try to read from the array.
 
-`git clone https://github.com/airspace-link-inc/engineering-challenge.git`
-
-### Initialize The Application
-
-`yarn install`
-
-### Start the application
-
-`yarn start`
-
-### Build a deployable version of the app
-
-`yarn build`
-
-### Lint your code
-
-`yarn lint`
-
-### Verify all TypeScripts are in good working order
-
-`yarn tsc`
-
-### Run tests
-
-`yarn test`
-
-See documentation on writing tests at [Testing Library](https://testing-library.com/docs/)
-
-## Technologies included in this repo
-
-- [TypeScript](https://www.typescriptlang.org/): Extends JavaScript to adding data types
-- [React](https://reactjs.org/): Rendering engine for interactive UIs. Includes setup with react-refresh for hot module reloading.
-- [WebPack](https://webpack.js.org/): Bundles the various JavaScript/TypeScript files together into a final "bundled" version for the web server
-- [AntD](https://ant.design/components/overview/): React based UI component library
-- [Styled Components](https://styled-components.com/): Reusable and isolated component styling for React applications
-- [Mobx](https://github.com/mobxjs/mobx): Full featured and reactive state management
-- [SASS](https://sass-lang.com/): CSS Precompiler. Allows you to build css with variables and logic.
-- [ESRI](https://developers.arcgis.com/javascript/latest/): Esri JavaScript map SDK
-- [Babel](https://babeljs.io/): JavaScript "transpiler"
-- [Jest](https://jestjs.io/): Jest is a delightful JavaScript Testing Framework with a focus on simplicity
-- [Testing Library](https://testing-library.com/docs/): Simple and complete testing utilities that encourage good testing practices
+The solution was to make sure that when accessing the observable array, we use a computed value that returns a slice of the observable array instead of the proxy itself!

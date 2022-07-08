@@ -7,15 +7,11 @@ function doesIntersect(graphicOne: Graphic, graphicTwo: Graphic): boolean {
 }
 
 function computeIntersectionGeometry(graphicOne: Graphic, graphicTwo: Graphic): __esri.Geometry | __esri.Geometry[] {
-  // HINT: you can use the geometry engine to calculate the intersection of two geometries
-  // https://developers.arcgis.com/javascript/latest/api-reference/esri-geometry-geometryEngine.html#intersect
   return geometryEngine.intersect(graphicOne.geometry, graphicTwo.geometry);
 }
 
 function computeIntersectionArea(polygon: Polygon): number {
-  // HINT: you can use the geometry engine to calculate area of a polygon
-  // https://developers.arcgis.com/javascript/latest/api-reference/esri-geometry-geometryEngine.html#geodesicArea
-  return geometryEngine.geodesicArea(polygon, 'square-miles');
+  return geometryEngine.geodesicArea(polygon, 'square-meters');
 }
 
 export default {
