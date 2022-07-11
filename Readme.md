@@ -53,6 +53,10 @@ I hit a snag when attempting to make the `intersectingAreas` area observable. Th
 
 The solution was to make sure that when accessing the observable array, we use a computed value that returns a slice of the observable array instead of the proxy itself!
 
+### UI Design
+
+I used the [ant](https://ant.design/components/overview/) library that was already provided. I chose to use the Alert component to tell the user when their flights are valid or have intersecting paths in the no fly zone. I also made sure that the user cannot interact with the map unless the no fly zone succesfully loads. This is okay for now because the API call is mocked behind a 3 second timer and always suceeds. Error handling to come!
+
 ### Future Implementation Ideas
 1. Deleting a sketch does not currently delete its underlying intersection polygon
 2. Review and improve webpack configuration
@@ -64,3 +68,5 @@ The solution was to make sure that when accessing the observable array, we use a
 9. Format the intersecting area
 10. Complete Delete functionality from the sketch event
 11. Complete Delete functionality from the Alert element
+12. Have sketches that already exist update appropriately to changes in the NO FLY ZONE
+13. Error handling for failed api calls

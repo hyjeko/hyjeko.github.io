@@ -1,12 +1,28 @@
 import React from 'react';
 import { observer } from "mobx-react-lite";
 import { useStore } from "../stores/RootStore";
-import { Alert, Progress } from 'antd';
+import { Alert, Spin } from 'antd';
 import styled from 'styled-components';
-//import FlightInfoPanel from './FlightInfoPanel';
 
 const InfoContainer = styled.div`
   padding-top: 12px;
+`
+
+const SpinContainer = styled.div`
+    z-index: 1000;
+    background: white;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
+
+const SpinLabel = styled.h3`
+    padding: 12px;
 `
 
 function InfoContainerPanel() {
@@ -15,12 +31,17 @@ function InfoContainerPanel() {
 
     return (
         <InfoContainer>
+            {mapStore.isFetching ? 
+                <SpinContainer>
+                    <Spin/>
+                    <SpinLabel>{'Loading No Fly Zone...'}</SpinLabel>
+                </SpinContainer>
+            :
             <FlightInfoPanel
                 isFlightApproved={isFlightApproved}
                 intersectingAreas={mapStore.getIntersectingAreas}
             />
-            {mapStore.isFetching && 
-            <Progress percent={100} showInfo={false}/>}
+            }
         </InfoContainer>
     );
 }

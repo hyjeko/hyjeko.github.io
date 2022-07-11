@@ -1,5 +1,5 @@
 const SPATIAL_REFERENCE_WELL_KNOWN_ID = 102100;
-const FIVE_SECONDS = 5000;
+const THREE_SECONDS = 3000;
 
 /**
  * Generate hard coded polygon rings for no fly zone above DTW
@@ -38,7 +38,7 @@ async function dataFetch(_resource: RequestInfo, _options: RequestInit): Promise
     setTimeout(() => {
       // const response = new Response();
       resolve(getDTWPolygonRings());
-    }, FIVE_SECONDS);
+    }, THREE_SECONDS);
   });
   return examplePromise;
 }
