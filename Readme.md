@@ -1,8 +1,14 @@
 ### Description
 
-We need to determine if the area returned by the FAA is in a safe flying zone or not.
+This site lets you draw sketches over no fly areas to determine if your flight path is valid or not.
 
-At first this means loading in a hardcoded no fly zone to sketch over (DTW). We would like this data to be restful in the future.
+As long as the alert in the top remains green and says "Flight Path Valid!"
+
+We answer this question by intersecting the sketch geometries with the no fly areas. 
+
+If you create a sketch that overlaps with a no fly zone, then you will be show an alert indicating the intersecting area in square miles. 
+
+Delete will currently delete all sketches and intersection polygons. 
 
 ### Initial Approach
 
@@ -56,6 +62,8 @@ The solution was to make sure that when accessing the observable array, we use a
 ### UI Design
 
 I used the [ant](https://ant.design/components/overview/) library that was already provided. I chose to use the Alert component to tell the user when their flights are valid or have intersecting paths in the no fly zone. I also made sure that the user cannot interact with the map unless the no fly zone succesfully loads. This is okay for now because the API call is mocked behind a 3 second timer and always suceeds. Error handling to come!
+
+The responsive solution is to use a 3 column grid layout, where columns 0 and 2 represent horizontal space reserved for the sketch and map controls. Column 1 will hold the alert content the user is interested in to determine if their flight is valid.
 
 ### Future Implementation Ideas
 1. Deleting a sketch does not currently delete its underlying intersection polygon
