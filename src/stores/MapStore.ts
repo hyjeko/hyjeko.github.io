@@ -7,7 +7,7 @@ import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import Graphic from '@arcgis/core/Graphic';
 import Polygon from '@arcgis/core/geometry/Polygon';
 import mapStoreUtils from './mapStoreUtils';
-import { NoFlyRings, getPolygonRings } from '../api/apiService';
+import { requestNoFlyArea } from '../api/apiService';
 
 const IDLE_SKETCH_STATE = 'idle';
 
@@ -34,6 +34,8 @@ export default class MapStore {
   //UI
   sketchState!: string;
   intersectingAreas: number[] = observable.array();
+  //API
+  isFetching!: boolean;
 
   /**
    * Create a new instance of MapStore given a rootStore
@@ -47,10 +49,13 @@ export default class MapStore {
       addIntersectingArea: action,
       clearIntersectingArea: action,
       getIntersectingAreas: computed,
+      isFetching: observable,
+      setIsFetching: action,
     };
     makeObservable(this, annotations);
     this.rootStore = rootStore;
     this.setSketchState(IDLE_SKETCH_STATE);
+    this.setIsFetching(false);
   }
 
   /**
@@ -109,10 +114,14 @@ export default class MapStore {
     return this.intersectingAreas.slice();
   }
 
+  setIsFetching(val: boolean) {
+    this.isFetching = val;
+  }
+
   /**
    * Initialize the no fly layer
    */
-  constructNoFlyLayer() {
+  async constructNoFlyLayer() {
     this.noFlyLayer = new GraphicsLayer();
     //auto cast as simple-fill
     const symbol = {
@@ -126,7 +135,9 @@ export default class MapStore {
     };
 
     // This is the NO_FLY area provided to us by FAA
-    const noFlyRings: NoFlyRings = getPolygonRings();
+    this.setIsFetching(true);
+    const noFlyRings = await requestNoFlyArea();
+    this.setIsFetching(false);
 
     const graphicGeometry = {
       geometry: new Polygon(noFlyRings),
@@ -186,6 +197,7 @@ export default class MapStore {
 
     const inputGraphic = event.graphic;
     const noFlyLayerGraphic = this.noFlyLayer.graphics.getItemAt(0);
+    if (noFlyLayerGraphic === undefined) return;
 
     // THERE ARE 3 STEPS TO SATISFYING THE BASE REQUIREMENTS FOR THE CHALLENGE
 

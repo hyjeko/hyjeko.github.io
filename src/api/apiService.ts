@@ -1,35 +1,11 @@
 const SPATIAL_REFERENCE_WELL_KNOWN_ID = 102100;
+const FIVE_SECONDS = 5000;
 
 /**
- * Standard http browser fetch
- * @param resource The resource to fetch
- * @param options The init options for the fetch request
- * @returns A promise containing the Response value
+ * Generate hard coded polygon rings for no fly zone above DTW
+ * @returns polygon rings representing no fly area
  */
-async function dataFetch(resource: RequestInfo, options: RequestInit): Promise<Response> {
-  const response = await fetch(resource, options);
-  return response;
-}
-
-/**
- * Request and return the current no fly area from the FAA as
- */
-export async function requestNoFlyArea() {
-  const resource = 'helloWorld';
-  const options: RequestInit = {
-    method: 'GET',
-  };
-  return await dataFetch(resource, options);
-}
-
-export type NoFlyRings = {
-  spatialReference: {
-    wkid: number;
-  };
-  rings: number[][][];
-};
-
-export function getPolygonRings() {
+function getDTWPolygonRings() {
   return {
     //This indicates the projected or geographic coordinate system used to locate geographic features in the map (mapProjection function)
     spatialReference: { wkid: SPATIAL_REFERENCE_WELL_KNOWN_ID },
@@ -47,3 +23,42 @@ export function getPolygonRings() {
     ],
   };
 }
+
+/**
+ * Standard http browser fetch
+ * @param resource The resource to fetch
+ * @param options The init options for the fetch request
+ * @returns A promise containing the Response value
+ */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+async function dataFetch(_resource: RequestInfo, _options: RequestInit): Promise<NoFlyRings> {
+  //const response = await fetch(resource, options);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const examplePromise: Promise<NoFlyRings> = new Promise((resolve, _reject) => {
+    setTimeout(() => {
+      // const response = new Response();
+      resolve(getDTWPolygonRings());
+    }, FIVE_SECONDS);
+  });
+  return examplePromise;
+}
+
+/**
+ * Request and return the current no fly area from the FAA as NoFlyRings
+ */
+async function requestNoFlyArea(): Promise<NoFlyRings> {
+  const resource = 'helloWorld';
+  const options: RequestInit = {
+    method: 'GET',
+  };
+  return await dataFetch(resource, options);
+}
+
+type NoFlyRings = {
+  spatialReference: {
+    wkid: number;
+  };
+  rings: number[][][];
+};
+
+export { requestNoFlyArea, NoFlyRings };
