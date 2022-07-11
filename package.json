@@ -9,6 +9,7 @@
     "build": "NODE_ENV=production webpack",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "jest",
+    "predeploy": "yarn build",
     "deploy": "gh-pages -d build"
   },
   "dependencies": {
