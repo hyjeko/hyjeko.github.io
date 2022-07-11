@@ -31,7 +31,7 @@ const commonConfig = {
 
   //Application output location
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.join(__dirname, 'build'),
     filename: '[name].bundle.js',
     chunkFilename: '[name].chunk.js',
     publicPath: '',

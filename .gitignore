@@ -1,7 +1,7 @@
 # Web #
 #######
 node_modules/
-dist/
+build/
 .env
 
 # Compiled source #

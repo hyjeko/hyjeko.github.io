@@ -1,19 +1,22 @@
 {
   "name": "react-esri-template",
   "version": "1.0.0",
+  "homepage": "https://hyjeko.github.io/hyjeko.github.io",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
     "start": "webpack serve",
     "build": "NODE_ENV=production webpack",
     "lint": "eslint . --ext .ts,.tsx",
-    "test": "jest"
+    "test": "jest",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
     "@arcgis/core": "^4.20.2",
     "antd": "^4.16.9",
     "axios": "^0.27.2",
+    "gh-pages": "^4.0.0",
     "mobx": "^6.3.2",
     "mobx-react-lite": "^3.2.0",
     "moment": "^2.29.1",
