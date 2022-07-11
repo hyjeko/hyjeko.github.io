@@ -7,8 +7,10 @@ import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer';
 import Graphic from '@arcgis/core/Graphic';
 import Polygon from '@arcgis/core/geometry/Polygon';
 import mapStoreUtils from './mapStoreUtils';
+import { NoFlyRings, getPolygonRings } from '../api/apiService';
 
-const SPATIAL_REFERENCE_WELL_KNOWN_ID = 102100;
+const IDLE_SKETCH_STATE = 'idle';
+
 /**
  * MapStore represents the mobx store for the Map Component to consume.
  * It is exposed through the custom context hook "useStore"
@@ -43,11 +45,12 @@ export default class MapStore {
       setSketchState: action,
       intersectingAreas: observable,
       addIntersectingArea: action,
+      clearIntersectingArea: action,
       getIntersectingAreas: computed,
     };
     makeObservable(this, annotations);
     this.rootStore = rootStore;
-    this.setSketchState('idle');
+    this.setSketchState(IDLE_SKETCH_STATE);
   }
 
   /**
@@ -83,8 +86,19 @@ export default class MapStore {
     observable(this.intersectingAreas).push(area);
   }
 
+  /**
+   * Remove the area from the array
+   * @param area area to remove
+   */
   removeIntersectingArea(area: number) {
     observable(this.intersectingAreas).remove(area);
+  }
+
+  /**
+   * Remove all the areas from the array
+   */
+  clearIntersectingArea() {
+    observable(this.intersectingAreas).clear();
   }
 
   /**
@@ -111,28 +125,16 @@ export default class MapStore {
       },
     };
 
+    // This is the NO_FLY area provided to us by FAA
+    const noFlyRings: NoFlyRings = getPolygonRings();
+
+    const graphicGeometry = {
+      geometry: new Polygon(noFlyRings),
+      symbol,
+    };
+
     // Construct map graphic
-    this.noFlyLayer.add(
-      // This is the NO_FLY area graphic supplied to us by the FAA
-      new Graphic({
-        geometry: new Polygon({
-          spatialReference: { wkid: SPATIAL_REFERENCE_WELL_KNOWN_ID }, //This indicates the projected or geographic coordinate system used to locate geographic features in the map (mapProjection function)
-          rings: [
-            [
-              [-9278977.502393615, 5196972.662366206],
-              [-9278404.224681476, 5197240.191965203],
-              [-9274505.936238931, 5195673.232885358],
-              [-9275518.726863708, 5190055.1113064],
-              [-9278881.956108259, 5189061.429938688],
-              [-9280869.318843672, 5188660.135540191],
-              [-9282646.479751302, 5192481.986954449],
-              [-9278977.502393615, 5196972.662366206],
-            ],
-          ],
-        }),
-        symbol,
-      })
-    );
+    this.noFlyLayer.add(new Graphic(graphicGeometry));
   }
 
   /**
@@ -225,11 +227,12 @@ export default class MapStore {
     //TODO delete appropriately instead of removing all
     console.log('sketchDelete() -> removeAll()', event);
     this.sketchLayer.removeAll();
+    this.clearIntersectingArea();
   };
 
   cleanup() {
     // Todo, remove any listeners
     this.sketch.destroy();
-    this.setSketchState('idle');
+    this.setSketchState(IDLE_SKETCH_STATE);
   }
 }

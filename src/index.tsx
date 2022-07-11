@@ -1,6 +1,6 @@
 import 'normalize.css';
 import './style/main.scss';
-//import "antd/lib/button/style/index.css";
+import 'antd/dist/antd.css';
 
 import React from 'react';
 import App from './App';

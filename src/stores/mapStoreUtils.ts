@@ -11,7 +11,7 @@ function computeIntersectionGeometry(graphicOne: Graphic, graphicTwo: Graphic): 
 }
 
 function computeIntersectionArea(polygon: Polygon): number {
-  return geometryEngine.geodesicArea(polygon, 'square-meters');
+  return geometryEngine.geodesicArea(polygon, 'square-miles');
 }
 
 export default {

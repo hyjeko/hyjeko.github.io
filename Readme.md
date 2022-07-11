@@ -52,3 +52,15 @@ In order to satisfy the base requirements we need to be able to display to the u
 I hit a snag when attempting to make the `intersectingAreas` area observable. The code was still functional but mob x was emitting warnings that I was accessing a observable value in a non-reactive context whenever I would try to read from the array.
 
 The solution was to make sure that when accessing the observable array, we use a computed value that returns a slice of the observable array instead of the proxy itself!
+
+### Future Implementation Ideas
+1. Deleting a sketch does not currently delete its underlying intersection polygon
+2. Review and improve webpack configuration
+3. Handle 1...n no fly zone geometries
+4. Enable view layer toggling for the sketch layer and the no fly layer
+7. Persist sketches in localStorage or some other data persistence solution so they survive page reloads
+8. Create ability to save flight sketches
+8. Create settings page to toggle different map options and sketch options etc.
+9. Format the intersecting area
+10. Complete Delete functionality from the sketch event
+11. Complete Delete functionality from the Alert element
