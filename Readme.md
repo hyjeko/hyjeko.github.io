@@ -6,7 +6,7 @@ At first this means loading in a hardcoded no fly zone to sketch over (DTW). We 
 
 ### Initial Approach
 
-1. Create Trello board to manage work and understand problem
+1. Create [Trello board](https://trello.com/b/xif1cI8h/airspace-link-coding-challenge) to manage work and understand problem
 2. Start app and play with functionality
 3. Open up devtools and inspect
    - No local storage
