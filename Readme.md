@@ -72,7 +72,7 @@ The solution was to make sure that when accessing the observable array, we use a
 
 ### UI Design
 
-I used the [ant](https://ant.design/components/overview/) library that was already provided. I chose to use the Alert component to tell the user when their flights are valid or have intersecting paths in the no fly zone. I also made sure that the user cannot interact with the map unless the no fly zone succesfully loads. This is okay for now because the API call is mocked behind a 3 second timer and always suceeds. Error handling to come!
+I used the [ant](https://ant.design/components/overview/) library that was already provided. I chose to use the Alert component to tell the user when their flights are valid or have intersecting paths in the no fly zone. I also made sure that the user cannot interact with the map unless the no fly zone succesfully loads. ~~This is okay for now because the API call is mocked behind a 3 second timer and always suceeds.~~ Error handling to come!
 
 The responsive solution is to use a 3 column grid layout, where columns 0 and 2 represent horizontal space reserved for the sketch and map controls. Column 1 will hold the alert content the user is interested in to determine if their flight is valid.
 
