@@ -12,7 +12,14 @@ If you create a sketch that overlaps with a no fly zone, then you will be shown 
 
 Delete will remove the polygon selected and its associated intersecting area if any exist.
 
-Deleting is accomplished by looping through the existing sketches for each delete sketch, determining if they intersect, then matching their exact areas, and removing them together.
+Deleting is accomplished by looping through the existing sketches to find the matching `intersectingArea` for the sketch being deleted. This is accomplished with the `attributes` property on the intersecting sketch `Graphic`. When a new intersecting area is added we are sure to include
+```js
+{
+   isInterSectingGraphic: true,
+   intersectingArea: intersectionArea,
+}
+```
+so that we can then match the `intersectingArea` from the `Graphic` `attributes` to the delete sketch `Graphi` area
 
 ### Initial Approach
 
