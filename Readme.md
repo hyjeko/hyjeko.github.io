@@ -89,6 +89,6 @@ The responsive solution is to use a 3 column grid layout, where columns 0 and 2 
 9. Error handling for failed api calls
 10. Implement drag and update functionality for sketches and their associated intersections
 
-#Screenshots
+### Screenshots
 
 ![image](https://user-images.githubusercontent.com/6778101/178548542-dee881df-b043-40f0-ac86-720f37e0edeb.png)
