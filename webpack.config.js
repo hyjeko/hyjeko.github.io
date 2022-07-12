@@ -10,6 +10,7 @@ const ArcGISPlugin = require('@arcgis/webpack-plugin');
 //const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
+const Dotenv = require('dotenv-webpack');
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 /**
@@ -96,6 +97,8 @@ const commonConfig = {
   // bundle optimization, asset management and injection of environment
   // variables.
   plugins: [
+    // Load env vars
+    new Dotenv(),
     // Analyze bundle
     // new BundleAnalyzerPlugin(),
 
