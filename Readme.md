@@ -78,3 +78,4 @@ The responsive solution is to use a 3 column grid layout, where columns 0 and 2 
 7. Format the intersecting area
 8. Have sketches that already exist update appropriately to changes in the NO FLY ZONE
 9. Error handling for failed api calls
+10. Implement drag and update functionality for sketches and their associated intersections
