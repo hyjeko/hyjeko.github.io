@@ -10,18 +10,29 @@ import mapStoreUtils from './mapStoreUtils';
 import { requestNoFlyArea } from '../api/apiService';
 
 const IDLE_SKETCH_STATE = 'idle';
+// autocasts as new SimpleFillSymbol()
+const INTERSECT_SYMBOL = {
+  type: 'simple-fill',
+  color: [255, 192, 203, 0.8],
+  style: 'solid',
+  outline: {
+    color: 'red',
+    width: 2,
+  },
+};
 
 /**
  * MapStore represents the mobx store for the Map Component to consume.
  * It is exposed through the custom context hook "useStore"
  *
- * @property rootStore
- * @property map
- * @property noFlyLayer
- * @property sketchLayer
- * @property sketch
- * @property sketchState
- * @property exampleObservableState
+ * @property rootStore RootStore
+ * @property map Map
+ * @property noFlyLayer GraphicsLayer
+ * @property sketchLayer GraphicsLayer
+ * @property sketch Sketch
+ * @property sketchState string
+ * @property intersectingAreas number[]
+ * @property isFetching boolean
  */
 export default class MapStore {
   //Root
@@ -48,6 +59,7 @@ export default class MapStore {
       intersectingAreas: observable,
       addIntersectingArea: action,
       clearIntersectingArea: action,
+      removeIntersectingArea: action,
       getIntersectingAreas: computed,
       isFetching: observable,
       setIsFetching: action,
@@ -208,21 +220,14 @@ export default class MapStore {
       const intersectionArea = mapStoreUtils.computeIntersectionArea(intersectionGeometry as Polygon);
       this.addIntersectingArea(intersectionArea);
 
-      // autocasts as new SimpleFillSymbol()
-      const symbol = {
-        type: 'simple-fill',
-        color: [255, 192, 203, 0.8],
-        style: 'solid',
-        outline: {
-          color: 'red',
-          width: 2,
-        },
-      };
-
       // STEP 3: create a new graphic with any possible intersection, and display it on the map
       const intersectGraphic = new Graphic({
         geometry: intersectionGeometry as Polygon,
-        symbol,
+        symbol: INTERSECT_SYMBOL,
+        attributes: {
+          isInterSectingGraphic: true,
+          intersectingArea: intersectionArea,
+        },
       });
       this.sketchLayer.graphics.add(intersectGraphic);
     } else {
@@ -236,10 +241,31 @@ export default class MapStore {
    * @return exit
    */
   sketchDelete = (event: __esri.SketchDeleteEvent) => {
-    //TODO delete appropriately instead of removing all
-    console.log('sketchDelete() -> removeAll()', event);
-    this.sketchLayer.removeAll();
-    this.clearIntersectingArea();
+    const deleteEventGraphics = event.graphics;
+    const deleteGraphics = deleteEventGraphics;
+    const sketchGraphicSlice = this.sketchLayer.graphics.slice();
+
+    for (let n = 0; n < deleteGraphics.length; n += 1) {
+      const currentDeleteGraphic = deleteGraphics[n];
+
+      for (let i = 0; i < sketchGraphicSlice.length; i += 1) {
+        const currentGraphic = sketchGraphicSlice.getItemAt(i);
+
+        if (mapStoreUtils.doesIntersect(currentGraphic, currentDeleteGraphic)) {
+          const currentGraphicAttributes = currentGraphic.attributes;
+
+          if (currentGraphicAttributes === null) continue;
+
+          const intersectionGeometry = mapStoreUtils.computeIntersectionGeometry(currentGraphic, currentDeleteGraphic);
+          const intersectionArea = mapStoreUtils.computeIntersectionArea(intersectionGeometry as Polygon);
+
+          if (currentGraphicAttributes.intersectingArea === intersectionArea) {
+            this.sketchLayer.graphics.removeAt(i);
+            this.removeIntersectingArea(intersectionArea);
+          }
+        }
+      }
+    }
   };
 
   cleanup() {

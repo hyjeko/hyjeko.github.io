@@ -6,11 +6,11 @@ This site lets you draw sketches over no fly areas to determine if your flight p
 
 As long as the alert in the top remains green and says "Flight Path Valid!"
 
-We answer this question by intersecting the sketch geometries with the no fly areas. 
+We answer this question by intersecting the sketch geometries with the no fly areas.
 
-If you create a sketch that overlaps with a no fly zone, then you will be show an alert indicating the intersecting area in square miles. 
+If you create a sketch that overlaps with a no fly zone, then you will be shown an alert indicating the intersecting area in square miles.
 
-Delete will currently delete all sketches and intersection polygons. 
+Delete will remove the polygon selected and its associated intersecting area if any exist.
 
 ### Initial Approach
 
@@ -68,15 +68,13 @@ I used the [ant](https://ant.design/components/overview/) library that was alrea
 The responsive solution is to use a 3 column grid layout, where columns 0 and 2 represent horizontal space reserved for the sketch and map controls. Column 1 will hold the alert content the user is interested in to determine if their flight is valid.
 
 ### Future Implementation Ideas
-1. Deleting a sketch does not currently delete its underlying intersection polygon
-2. Review and improve webpack configuration
-3. Handle 1...n no fly zone geometries
-4. Enable view layer toggling for the sketch layer and the no fly layer
-7. Persist sketches in localStorage or some other data persistence solution so they survive page reloads
-8. Create ability to save flight sketches
-8. Create settings page to toggle different map options and sketch options etc.
-9. Format the intersecting area
-10. Complete Delete functionality from the sketch event
-11. Complete Delete functionality from the Alert element
-12. Have sketches that already exist update appropriately to changes in the NO FLY ZONE
-13. Error handling for failed api calls
+
+1. Review and improve webpack configuration
+2. Handle 1...n no fly zone geometries
+3. Enable view layer toggling for the sketch layer and the no fly layer
+4. Persist sketches in localStorage or some other data persistence solution so they survive page reloads
+5. Create ability to save flight sketches
+6. Create settings page to toggle different map options and sketch options etc.
+7. Format the intersecting area
+8. Have sketches that already exist update appropriately to changes in the NO FLY ZONE
+9. Error handling for failed api calls

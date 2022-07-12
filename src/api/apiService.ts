@@ -7,7 +7,6 @@ const Host = {
 };
 
 function buildResourcePath(host: string, resource: ResourcePaths) {
-  console.log('host + resource', host + resource);
   return host + resource;
 }
 
