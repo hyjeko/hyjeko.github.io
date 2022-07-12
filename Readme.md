@@ -12,6 +12,8 @@ If you create a sketch that overlaps with a no fly zone, then you will be shown 
 
 Delete will remove the polygon selected and its associated intersecting area if any exist.
 
+Deleting is accomplished by looping through the existing sketches for each delete sketch, determining if they intersect, then matching their exact areas, and removing them together.
+
 ### Initial Approach
 
 1. Create [Trello board](https://trello.com/b/xif1cI8h/airspace-link-coding-challenge) to manage work and understand problem
