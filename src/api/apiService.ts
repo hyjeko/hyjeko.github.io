@@ -1,12 +1,13 @@
 enum ResourcePaths {
-  noFlyZones = '/noFlyZones'
+  noFlyZones = '/noFlyZones',
 }
 
 const Host = {
-  path: process.env.NODE_ENV === 'production' ? process.env.API_HOST : 'http://localhost:8081'
-}
+  path: process.env.NODE_ENV === 'production' ? process.env.API_HOST : 'http://localhost:8081',
+};
 
 function buildResourcePath(host: string, resource: ResourcePaths) {
+  console.log('host + resource', host + resource);
   return host + resource;
 }
 
@@ -24,9 +25,9 @@ async function dataFetch(resource: RequestInfo, options: RequestInit): Promise<a
  * Request and return the current no fly area from the FAA as NoFlyRings
  */
 async function requestNoFlyArea(): Promise<NoFlyRings> {
-  const resource = buildResourcePath(Host.path!, ResourcePaths.noFlyZones)
+  const resource = buildResourcePath(Host.path!, ResourcePaths.noFlyZones);
   const options: RequestInit = {
-    method: 'GET'
+    method: 'GET',
   };
   const response = await dataFetch(resource, options);
   const data = await response.json();
